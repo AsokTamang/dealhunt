@@ -35,7 +35,7 @@ export default function Navbar() {
               Dashboard
             </Button>
             <Button
-              onClick={() => signOut()}
+              onClick={() => signOut({ callbackUrl: "/" })}
               className="bg-red-500 text-white hover:bg-red-600 transition"
             >
               Sign out

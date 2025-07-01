@@ -19,6 +19,9 @@ interface dataStoreType {
   titles: string[];
   images: string[];
   fetchDatas: (
+     category: string,
+    price: string,
+    rate: string,
     item: string,
     location: string
   ) => Promise<{ success: boolean; message: string }>;
@@ -29,9 +32,9 @@ export const valueStore = create<dataStoreType>((set) => ({
   links: [],
   titles: [],
   images: [],
-  fetchDatas: async (item, location) => {
+  fetchDatas: async (category,price,rate,item,location) => {
     try {
-      const res = await axios.post("/api/search", { item, location });
+      const res = await axios.post("/api/search", {category,price,rate, item, location });
       const { success, data } = res.data;
 
       if (success && Array.isArray(data) && data.length > 0) {

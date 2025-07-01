@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
 export async function POST(req: NextRequest) {
-  const { item, location } = await req.json();
-  const query = `latest ${item} deals OR offers OR discounts near ${location} today`;
+  const {category,price,rate, item, location } = await req.json();
+  const query = `buy ${item} ${category} deals under ${price} ${rate} rating ${location}`;
+
 
   try {
     const res = await axios.get("https://www.googleapis.com/customsearch/v1", {

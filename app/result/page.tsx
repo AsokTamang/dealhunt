@@ -2,9 +2,28 @@
 import React from "react";
 import Link from "next/link";
 import { valueStore } from "@/store/dataStorage";
+import { Button } from "@/components/ui/button";
+import { toast  } from "react-hot-toast";
 
 export default function Result() {
-  const { links, titles, images } = valueStore();
+  const { links, titles, images,saveDeal } = valueStore();
+  
+
+  const saveLink=async(i:number)=>{
+    const newTitle=titles[i];
+    const newLink=links[i];    //here we are extracting the newLink.
+    const {success,message}=await saveDeal(newTitle,newLink);  
+    if(success){
+      toast.success(message);
+
+
+    }
+    else{
+      toast.error(message);
+    }
+
+
+  }
 
   return (
     <div className="min-h-screen px-4 py-10 bg-gray-50">
@@ -28,19 +47,30 @@ export default function Result() {
 
         {/* Links */}
         <ul className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 break-words">
-          <h2 className="text-xl font-semibold mb-4 text-primary"> Links</h2>
-          {links.map((link, i) => (
-            <li key={i} className="mb-3">
-              <Link
-                href={link}
-                target="_blank"
-                className="text-blue-600 hover:underline text-sm break-all"
-              >
-                {link}
-              </Link>
-            </li>
-          ))}
-        </ul>
+  <h2 className="text-xl font-semibold mb-4 text-primary">Links</h2>
+  {links.map((link, i) => (
+    <li
+      key={i}
+      className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100 shadow-sm flex flex-col gap-2"
+    >
+      <Link
+        href={link}
+        target="_blank"
+        className="text-blue-600 hover:underline text-sm break-all"
+      >
+        {link}
+      </Link>
+
+      <Button
+        onClick={() => saveLink(i)}
+        variant="secondary" // use variant if your Button supports it (like shadcn/ui)
+        className="w-fit text-sm hover:bg-green-500"
+      > Save this deal
+      </Button>
+    </li>
+  ))}
+</ul>
+
 
         {/* Images */}
         <ul className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">

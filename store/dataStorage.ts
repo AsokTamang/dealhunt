@@ -25,6 +25,7 @@ interface dataStoreType {
     item: string,
     location: string
   ) => Promise<{ success: boolean; message: string }>;
+  saveDeal:(title:string,link:string)=>Promise<{ success: boolean; message: string }>;
   reset: () => void;
 }
 
@@ -54,5 +55,32 @@ export const valueStore = create<dataStoreType>((set) => ({
       return { success: false, message: "Failed to fetch data." };
     }
   },
+  saveDeal:async(title:string,link:string)=>{
+    try {
+      const res=await axios.post('/api/deal',{title,link},{
+        headers:{
+          'Content-Type':'application/json'
+        }
+      });
+      const {success,data,message}=res.data;
+      if(success){
+        return ({success:true,message:message})
+      }
+      else{
+        return ({success:false,message:message})
+      }
+      
+    } catch (error:unknown) {
+      if(error instanceof Error){
+        console.log(error.message);
+        return ({success:false,message:error.message})
+      }
+       return ({success:false,message:'Deal saved unsuccessfull'})
+      
+    }
+
+  }
+  
+  ,
   reset: () => set({ links: [], titles: [], images: [] }),
 }));

@@ -34,6 +34,13 @@ export default function Navbar() {
             >
               Dashboard
             </Button>
+             <Button
+              onClick={() => router.push("/yourdeals")}
+              variant="outline"
+              className="border-primary text-primary hover:bg-gray-100"
+            >
+              Your deals
+            </Button>
             <Button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="bg-red-500 text-white hover:bg-red-600 transition"

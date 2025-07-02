@@ -1,7 +1,7 @@
 import { NextRequest,NextResponse } from "next/server";
 import { auth } from "@/auth";
 import client from "@/lib/db";
-export async function POST(req:NextRequest) {
+export async function POST(req:NextRequest) {   
     const session=await auth();
     const {title,link} = await req.json();   //we are extracting the title and link of url from the requested body.
     await client.connect();

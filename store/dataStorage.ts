@@ -16,6 +16,7 @@ interface objectProps {
 
 interface dataStoreType {
   links: string[];
+  savedLinks:Document[];
   titles: string[];
   images: string[];
   fetchDatas: (
@@ -26,11 +27,13 @@ interface dataStoreType {
     location: string
   ) => Promise<{ success: boolean; message: string }>;
   saveDeal:(title:string,link:string)=>Promise<{ success: boolean; message: string }>;
+  seeDeals:()=>Promise<{ success: boolean; message: string }>;
   reset: () => void;
 }
 
 export const valueStore = create<dataStoreType>((set) => ({
   links: [],
+  savedLinks:[],
   titles: [],
   images: [],
   fetchDatas: async (category,price,rate,item,location) => {
@@ -57,7 +60,7 @@ export const valueStore = create<dataStoreType>((set) => ({
   },
   saveDeal:async(title:string,link:string)=>{
     try {
-      const res=await axios.post('/api/deal',{title,link},{
+      const res=await axios.post('/api/adddeal',{title,link},{
         headers:{
           'Content-Type':'application/json'
         }
@@ -82,5 +85,28 @@ export const valueStore = create<dataStoreType>((set) => ({
   }
   
   ,
+  seeDeals:async()=>{
+    try {
+      const res=await axios.get('/api/seedeal');  //here we are using get method to fetch the datas from this endpoint
+      const{success,data,message}= res.data;
+      if(success){
+        set(()=>({
+          savedLinks:data,
+
+        }));
+        return({success:true,message});
+      }
+       return({success:false,message});
+
+      
+    } catch (error:unknown) {
+      if(error instanceof Error){
+        console.log(error.message);
+        return({success:false,message:'Internal server error'});
+      }
+      
+        return({success:false,message:'Internal server error'});
+    }
+  },
   reset: () => set({ links: [], titles: [], images: [] }),
 }));

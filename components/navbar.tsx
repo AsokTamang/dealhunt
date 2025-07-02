@@ -41,6 +41,21 @@ export default function Navbar() {
             >
               Your deals
             </Button>
+            <select onChange={(e)=>{router.push(`/tagpage?tagname=${e.target.value}`);
+          router.refresh();}}>
+              <option disabled value="">
+            Select a deal tag
+          </option>
+         <option value={"electronics"}>Electronics</option>
+          <option value={"food"}>Food</option>
+          <option value={"wears"}>Wearables</option>
+          <option value={"cosmetics"}>Cosmetics</option>
+          <option value={"athletics"}>Athletics</option>
+          <option value={"Homekitchen"}>Home & kitchen</option>
+          <option value={"ToysGames"}>Toys & Games</option>
+          <option value={"TravelLuggage"}>Travel & Luggage</option>
+          <option value={"HealthWellness"}>Health & Wellness</option>
+            </select>
             <Button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="bg-red-500 text-white hover:bg-red-600 transition"

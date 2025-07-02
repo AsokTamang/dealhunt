@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
+import { ObjectId } from "mongodb";
+
 
 interface objectProps {
   kind: string;
@@ -14,9 +16,15 @@ interface objectProps {
   pagemap: any;
 }
 
+interface resultType{   //this is the type of the object inside an array which is obtained from the return method of mongodb client.
+  userid:ObjectId;
+  title:string;
+  link:string;
+}
+
 interface dataStoreType {
   links: string[];
-  savedLinks:Document[];
+  savedLinks:resultType[];
   titles: string[];
   images: string[];
   fetchDatas: (
@@ -28,6 +36,7 @@ interface dataStoreType {
   ) => Promise<{ success: boolean; message: string }>;
   saveDeal:(title:string,link:string)=>Promise<{ success: boolean; message: string }>;
   seeDeals:()=>Promise<{ success: boolean; message: string }>;
+  deleteDeal:(link:string)=>Promise<{success:boolean,message:string}>;
   reset: () => void;
 }
 
@@ -108,5 +117,33 @@ export const valueStore = create<dataStoreType>((set) => ({
         return({success:false,message:'Internal server error'});
     }
   },
-  reset: () => set({ links: [], titles: [], images: [] }),
+  
+  deleteDeal:async(link)=>{
+    try {
+      const res=await axios.delete('/api/deletedeal',{data:{link:link}})   //while using the delete method we must pass the object or the value inside a key which is in an object form that must be inside an object as a value having a key called data.
+      const {success,data,message}=res.data;
+      if(success){
+         set((state)=>({
+          savedLinks:state.savedLinks.filter((item)=>item.link!==link)  //here we are removing the deal whose link matches with the link that we want to delete from.
+
+        }));
+        return ({success:true,message});
+      }
+       return ({success:false,message});
+      
+      
+      
+    } catch (error:unknown) {
+      if(error instanceof Error){
+        console.log(error.message);
+         return ({success:false,message:error.message});
+      
+        
+      }
+       return ({success:false,message:'Internal server error'});
+      
+      
+    }
+  },
+  reset: () => set({ links: [], titles: [], images: [],savedLinks:[] }),
 }));

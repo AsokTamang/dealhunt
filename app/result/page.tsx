@@ -57,6 +57,7 @@ export default function Result() {
         href={link}
         target="_blank"
         className="text-blue-600 hover:underline text-sm break-all"
+        rel="noopener noreferrer"
       >
         {link}
       </Link>

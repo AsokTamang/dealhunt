@@ -85,10 +85,10 @@ export default function Deals() {
   const elements = savedLinks.map((item, index) => (
     <div
       key={index}
-      className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition bg-white"
+      className="flex flex-col p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition bg-white"
     >
       <div className="flex-1 space-y-2">
-        <h1 className="text-lg font-semibold text-gray-900 truncate">
+        <h1 className="text-lg font-semibold text-gray-900 truncate max-w-full">
           {item.title}
         </h1>
         {/**here using rel="noopener and noreferrer" prevents the using of our scripts from external website for security as well as hides our website url for privacy */}
@@ -96,14 +96,14 @@ export default function Deals() {
           href={item.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm text-blue-600 break-words hover:underline"
+          className="text-sm text-blue-600 break-words hover:underline max-w-full block"
         >
           {item.link}
         </Link>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-3 mt-4 sm:flex-row sm:items-center sm:justify-between flex-wrap">
+        <div className="flex gap-2 flex-wrap w-full sm:w-auto">
           <select
             onChange={(e) => {
               setTags((prevState) => ({
@@ -112,7 +112,7 @@ export default function Deals() {
               }));
             }}
             value={tags[item.link] || ""}
-            className="px-3 py-2 border rounded-lg text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="px-3 py-2 border rounded-lg text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 w-full sm:w-auto"
           >
             <option disabled value="">
               Attach a tag
@@ -141,7 +141,9 @@ export default function Deals() {
           )}
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-row gap-2 items-center">
+           <div className="flex flex-col items-center text-xs text-gray-600">
+           <span>Delete</span>
           <Button
             variant="destructive"
             onClick={() => handleClick(item.link)}
@@ -150,6 +152,8 @@ export default function Deals() {
           >
             <RiDeleteBin6Line className="text-xl" />
           </Button>
+          </div>
+
 
           <div className="flex flex-col items-center text-xs text-gray-600">
             <span>Favourite</span>
@@ -168,9 +172,17 @@ export default function Deals() {
   ));
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div
+      className="max-w-4xl mx-auto px-4 py-8
+                 grid gap-6
+                 grid-cols-1
+                 sm:grid-cols-2
+                 lg:grid-cols-3"
+    >
       {savedLinks.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg">No deals saved yet.</p>
+        <p className="text-center text-gray-500 text-lg col-span-full">
+          No deals saved yet.
+        </p>
       ) : (
         elements
       )}

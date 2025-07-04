@@ -121,7 +121,7 @@ export default function Favourites() {
                 Edit Comment
               </Button>
             ) : (
-              <>
+              <div className="transition-all duration-300 ease-in-out overflow-hidden">
                 <Textarea
                   className="mt-2"
                   onChange={(e) => {
@@ -143,7 +143,7 @@ export default function Favourites() {
                 >
                   Update Comment
                 </Button>
-              </>
+              </div>
             )}
           </>
         ) : !shown[item.link] ? (
@@ -159,7 +159,7 @@ export default function Favourites() {
             </button>
           </div>
         ) : (
-          <>
+          <div className="transition-all duration-300 ease-in-out overflow-hidden">
             <Textarea
               className="mt-2"
               onChange={(e) => {
@@ -178,7 +178,7 @@ export default function Favourites() {
             >
               Save Comment
             </Button>
-          </>
+          </div>
         )}
       </div>
     </div>
@@ -190,11 +190,15 @@ export default function Favourites() {
         Your Favourite Deals
       </h1>
 
-      <div className="space-y-6">{favourites.length !== 0 ? elements : (
-        <p className="text-center text-gray-500 text-lg">
-          No deals are under your favourites currently.
-        </p>
-      )}</div>
+      <div className="space-y-6">
+        {favourites.length !== 0 ? (
+          elements
+        ) : (
+          <p className="text-center text-gray-500 text-lg">
+            No deals are under your favourites currently.
+          </p>
+        )}
+      </div>
     </main>
   );
 }

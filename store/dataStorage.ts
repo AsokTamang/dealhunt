@@ -41,6 +41,7 @@ interface dataStoreType {
   taggedDeals:tagresultType[];
   titles: string[];
   images: string[];
+  favourites:resultType[];
   fetchDatas: (
     category: string,
     price: string,
@@ -53,8 +54,10 @@ interface dataStoreType {
     link: string
   ) => Promise<{ success: boolean; message: string }>;
   seeDeals: () => Promise<{ success: boolean; message: string }>;
+   fetchFavourites: () => Promise<{ success: boolean; message: string }>;
   deleteDeal: (link: string) => Promise<{ success: boolean; message: string }>;
   addTag:   (tag: tagType) => Promise<{ success: boolean; message: string }>;
+  addToFav:   (link: string) => Promise<{ success: boolean; message: string }>;
   fetchtagDeals: (tagname: string) => Promise<{ success: boolean; message: string }>;
   reset: () => void;
 }
@@ -65,6 +68,8 @@ export const valueStore = create<dataStoreType>((set) => ({
   titles: [],
   images: [],
   taggedDeals:[],
+  favourites:[]
+  ,
   fetchDatas: async (category, price, rate, item, location) => {
     try {
       const res = await axios.post("/api/search", {
@@ -208,7 +213,59 @@ export const valueStore = create<dataStoreType>((set) => ({
       return { success: false, message: "Internal server error" };
     }
 
+  },
+  addToFav:async(link)=>{
+    try {
+      const res=await axios.post('/api/favourite',{link},{
+        headers:{
+          'Content-Type':'application/json'
+        }
+      });
+      const {success,message}=res.data;
+       if (success) {
+       
+        return { success: true, message:message };
+      }
+      else{
+         return { success: false, message:message };
+      }
+     
+
+      
+    } catch (error:unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        return { success: false, message: error.message };
+      }
+      return { success: false, message: "Internal server error" };
+    }
   }
+  ,
+  fetchFavourites:async()=>{
+     try {
+      const res = await axios.get("/api/getfavourites"); //here we are using get method to fetch the deals which are assigned favourites from this endpoint
+      const { success, data, message } = res.data;
+      if (success) {
+        set(() => ({
+          favourites: data,
+        }));
+        return { success: true, message:message };
+      }
+      else{
+         return { success: false, message:message };
+      }
+     
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        return { success: false, message: "Internal server error" };
+      }
+
+      return { success: false, message: "Internal server error" };
+    }
+
+  }
+  
   ,
   reset: () => set({ links: [], titles: [], images: [], savedLinks: [],taggedDeals:[] }),
 }));

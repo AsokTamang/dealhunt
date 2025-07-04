@@ -46,14 +46,24 @@ export default function Navbar() {
               Your deals
             </Button>
 
+
+             <Button
+              onClick={() => router.push("/favourites")}
+              variant="outline"
+              className="border-primary text-primary hover:bg-gray-100"
+            >
+              Your favourites
+            </Button>
+
             <select
               onChange={(e) => {
                 router.push(`/tagpage?tagname=${e.target.value.toLowerCase()}`);
                 router.refresh();
               }}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={''}     //here we are giving the value to the select element for the preselection option
             >
-              <option disabled value="">
+              <option disabled value="" >
                 Select a deal tag
               </option>
               <option value={"electronics"}>Electronics</option>

@@ -190,16 +190,16 @@ export const valueStore = create<dataStoreType>((set) => ({
   },
   fetchtagDeals:async(tagname)=>{
      try {
-      const res = await axios.get(`/api/fetchbytag/${tagname}`,
+      const res = await axios.get(`/api/fetchbytag/${tagname.toLowerCase()}`,    
       ); //while using the delete method we must pass the object or the value inside a key which is in an object form that must be inside an object as a value having a key called data.
       const { success, data, message } = res.data;
       if (success) {
         set(()=>({
           taggedDeals:data
         }))
-        return { success: true, message };
+        return { success: true, message:message };
       }
-      return { success: false, message };
+      return { success: false, message:message };
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message);

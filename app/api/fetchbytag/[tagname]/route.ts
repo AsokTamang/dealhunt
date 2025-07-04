@@ -13,15 +13,23 @@ export async function GET(req:NextRequest,{params}:paramType) {
     const session=await auth();
     const db=client.db('dealhunt');
     const collection=db.collection('Deal');
-    const {tagname}= params;
+    const {tagname}=await params;
     try {
-        const data=await collection.find({userid:session?.user.id,tag:tagname.toLowerCase()}).toArray();  //
-        return NextResponse.json({success:true,data,message:'Deals under this data fetched successfully'},{status:200})
+        const data=await collection.find({userid:session?.user.id,tag:tagname}).toArray();  //
+        if(data.length===0){
+             return NextResponse.json({success:false,data:null,message:'Deals under this tag doesnot exist'},{status:500})
+
+        }
+        else{
+             console.log('The fetched tagged deals are',data);
+        return NextResponse.json({success:true,data:data,message:'Deals under this tag fetched successfully'},{status:200})
+        }
+       
     } catch (error:unknown) {
 
         if(error instanceof Error){
             console.log(error.message)
-              return NextResponse.json({success:false,data:null,message:error.message},{status:500})
+             
 
         }
         

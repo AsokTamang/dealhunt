@@ -86,7 +86,7 @@ export default function Deals() {
           
             setTags((prevState) => ({
               ...prevState,
-              [item.link]: e.target.value,
+              [item.link]: e.target.value,     //here we are just making the key-value pair of item's link and the tag being as a value
             }));}
           }
           value={tags[item.link] || ""}
@@ -110,7 +110,7 @@ export default function Deals() {
           variant="destructive"
           onClick={() =>{ 
            
-            handleClick2({ tagTitle: tags[item.link], link: item.link });}}
+            handleClick2({ tagTitle: tags[item.link], link: item.link });}}  //here we are passing the title as well as the link.
           className="p-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors"
         >
           <IoIosAdd className="text-xl" />

@@ -20,6 +20,7 @@ interface resultType {
   userid: ObjectId;
   title: string;
   link: string;
+  comment:string|null;   //here we are declaring that this comment key is either of type string or null
 }
 
 interface tagresultType {

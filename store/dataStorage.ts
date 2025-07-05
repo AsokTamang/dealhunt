@@ -132,7 +132,7 @@ export const valueStore = create<dataStoreType>((set) => ({
       const { success, data, message } = res.data;
       if (success) {
         set((state) => ({
-          savedLinks:data,
+          savedLinks: data,
         }));
         return { success: true, message };
       }
@@ -204,12 +204,11 @@ export const valueStore = create<dataStoreType>((set) => ({
           taggedDeals: data,
         }));
         return { success: true, message: message };
-      } else {
-        set(() => ({
-          taggedDeals: [],   //if there is error or no links found under the tag then we set the taggedDeals to empty array.
-        }));
-        return { success: false, message: message };
       }
+      set(() => ({
+        taggedDeals: [], //if there is error or no links found under the tag then we set the taggedDeals to empty array.
+      }));
+      return { success: false, message: message };
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message);

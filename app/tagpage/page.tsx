@@ -5,8 +5,10 @@ import Link from "next/link";
 import { valueStore } from "@/store/dataStorage";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 export default function Tagpage() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { taggedDeals, fetchtagDeals } = valueStore();
   const tagname = searchParams.get("tagname");
@@ -14,12 +16,13 @@ export default function Tagpage() {
   React.useEffect(() => {
     const fetchDatas = async () => {
       try {
+        valueStore.setState({ taggedDeals: [] }); //here before runnning the fetchtagDeals function we are emptying the taggedDeals.
         const { success, message } = await fetchtagDeals(tagname!);
         if (success) {
           toast.success(message);
           console.log("the fetched tagged deals are :", taggedDeals);
         } else {
-          toast.error(message);
+          toast.error(message); //if there is no attached tag deals under this specific tag then we just reload the page.
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -27,8 +30,10 @@ export default function Tagpage() {
         }
       }
     };
-    fetchDatas();
-  }, [tagname]);
+    if (tagname) {
+      fetchDatas();
+    }
+  }, [tagname, pathname]);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">

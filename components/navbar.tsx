@@ -57,10 +57,6 @@ export default function Navbar() {
             <select
               onChange={(e) => {
                 router.push(`/tagpage?tagname=${e.target.value.toLowerCase()}`);
-
-                setTimeout(() => {
-                  window.location.reload();
-                }, 100);
               }}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               value={""} //here we are giving the value to the select element for the preselection option

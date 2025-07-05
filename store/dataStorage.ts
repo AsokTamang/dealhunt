@@ -132,7 +132,7 @@ export const valueStore = create<dataStoreType>((set) => ({
       const { success, data, message } = res.data;
       if (success) {
         set((state) => ({
-          savedLinks: [...state.savedLinks,...data],
+          savedLinks:data,
         }));
         return { success: true, message };
       }
@@ -200,8 +200,8 @@ export const valueStore = create<dataStoreType>((set) => ({
       const res = await axios.get(`/api/fetchbytag/${tagname.toLowerCase()}`); //while using the delete method we must pass the object or the value inside a key which is in an object form that must be inside an object as a value having a key called data.
       const { success, data, message } = res.data;
       if (success) {
-        set((state) => ({
-          taggedDeals: [data],
+        set(() => ({
+          taggedDeals: data,
         }));
         return { success: true, message: message };
       } else {
@@ -249,7 +249,7 @@ export const valueStore = create<dataStoreType>((set) => ({
       const { success, data, message } = res.data;
       if (success) {
         set((state) => ({
-          favourites: [...state.favourites,...data],
+          favourites: data,
         }));
         return { success: true, message: message };
       } else {

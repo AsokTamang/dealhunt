@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { valueStore } from "@/store/dataStorage";
 import { useSession } from "next-auth/react";

@@ -17,10 +17,9 @@ export default function Tagpage() {
         const { success, message } = await fetchtagDeals(tagname!);
         if (success) {
           toast.success(message);
+          console.log("the fetched tagged deals are :", taggedDeals);
         } else {
-          return;
-
-         
+          toast.error(message);
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -29,7 +28,7 @@ export default function Tagpage() {
       }
     };
     fetchDatas();
-  }, []);
+  }, [tagname]);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">

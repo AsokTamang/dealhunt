@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { useSession, signIn, signOut } from "next-auth/react";  //we must import the signin and signout from next-auth/react if we are using them in the client side but if we are using them on the server side then we must import them from auth.ts which is out server side code.
+import { useSession, signIn, signOut } from "next-auth/react"; //we must import the signin and signout from next-auth/react if we are using them in the client side but if we are using them on the server side then we must import them from auth.ts which is out server side code.
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
@@ -46,8 +46,7 @@ export default function Navbar() {
               Your deals
             </Button>
 
-
-             <Button
+            <Button
               onClick={() => router.push("/favourites")}
               variant="outline"
               className="border-primary text-primary hover:bg-gray-100"
@@ -58,12 +57,15 @@ export default function Navbar() {
             <select
               onChange={(e) => {
                 router.push(`/tagpage?tagname=${e.target.value.toLowerCase()}`);
-                router.refresh();
+
+                setTimeout(() => {
+                  window.location.reload();
+                }, 100);
               }}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-              value={''}     //here we are giving the value to the select element for the preselection option
+              value={""} //here we are giving the value to the select element for the preselection option
             >
-              <option disabled value="" >
+              <option disabled value="">
                 Select a deal tag
               </option>
               <option value={"electronics"}>Electronics</option>

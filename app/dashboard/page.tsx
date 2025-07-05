@@ -1,8 +1,6 @@
 // === FILE: /app/dashboard/page.tsx ===
 "use client";
 
-import { MdStarRate } from "react-icons/md";
-import axios from "axios";
 import { Input } from "@/components/ui/input";
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -13,8 +11,8 @@ export default function Dashboard() {
   const router = useRouter();
   const [item, setItem] = React.useState("");
   const [category, setCategory] = React.useState("");
-  const [price,setPrice]=React.useState('');
-   const [rate,setRate]=React.useState('');
+  const [price, setPrice] = React.useState("");
+  const [rate, setRate] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const { fetchDatas } = valueStore();
@@ -23,7 +21,13 @@ export default function Dashboard() {
     e.preventDefault();
     setLoading(true);
 
-    const { success, message } = await fetchDatas(category,price,rate,item, location);
+    const { success, message } = await fetchDatas(
+      category,
+      price,
+      rate,
+      item,
+      location
+    );
     console.log("Client response:", success, message);
 
     if (success) {
@@ -70,16 +74,13 @@ export default function Dashboard() {
           </select>
         </div>
 
-
-
-         <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-gray-700">Rate</label>
           <select onChange={(e) => setRate(e.target.value)}>
             <option>Select the item ratings</option>
             <option value={"5 star"}>⭐⭐⭐⭐⭐</option>
             <option value={"4 star"}>⭐⭐⭐⭐</option>
             <option value={"3 star"}>⭐⭐⭐</option>
-           
           </select>
         </div>
 

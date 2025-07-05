@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { valueStore } from "@/store/dataStorage";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 export default function Tagpage() {
   const searchParams = useSearchParams();
@@ -13,15 +14,22 @@ export default function Tagpage() {
   React.useEffect(() => {
     const fetchDatas = async () => {
       try {
-        await fetchtagDeals(tagname!);
+        const { success, message } = await fetchtagDeals(tagname!);
+        if (success) {
+          toast.success(message);
+        } else {
+          return;
+
+         
+        }
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.log(error.message);
         }
       }
     };
-    if (tagname) fetchDatas();
-  }, [tagname]);
+    fetchDatas();
+  }, []);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">

@@ -6,6 +6,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     clientId:process.env.Client_ID!,
     clientSecret:process.env.Client_secret!
   })],   //here Google is taken as our authentication provider.
+  trustHost:true   //this makes sure that all the host are true in the production mode
+  ,
   session:{strategy:'jwt'},   //and jwt as the session strategy.
   secret:process.env.AUTH_SECRET!,  
   callbacks:{
@@ -26,6 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         };
         return session;
     }
+    
  
   }
 })

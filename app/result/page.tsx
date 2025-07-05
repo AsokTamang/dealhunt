@@ -4,6 +4,7 @@ import Link from "next/link";
 import { valueStore } from "@/store/dataStorage";
 import { Button } from "@/components/ui/button";
 import { toast  } from "react-hot-toast";
+import Image from "next/image";
 
 export default function Result() {
   const { links, titles, images,saveDeal } = valueStore();
@@ -79,7 +80,9 @@ export default function Result() {
           {images.map((img, i) =>
             img ? (
               <li key={i} className="mb-4">
-                <img
+                <Image
+                width={65}
+                height={65}
                   src={img}
                   alt="Thumbnail"
                   className="w-full h-40 object-cover rounded-lg shadow-sm"

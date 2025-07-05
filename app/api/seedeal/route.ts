@@ -4,12 +4,11 @@ import { NextResponse } from "next/server";
 export async function GET() {
     await client.connect();  //here we are connecting to our mongodb through mmongoclient
     const session=await auth();
-    const userID=session?.user.id;
     const db=client.db('dealhunt');
     const collection=db.collection('Deal');
     try {
-         const allLinks=await collection.find({userid:userID}).toArray();  //then we are finding all the links based on this logged in user.
-         console.log(allLinks);
+         const allLinks=await collection.find({userid:session?.user.id}).toArray();  //then we are finding all the links based on this logged in user.
+         console.log('the saved links are ',allLinks);
          return NextResponse.json({success:true,data:allLinks,message:'Links found successfully'},{status:200});
 
         

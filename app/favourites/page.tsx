@@ -6,7 +6,6 @@ import { GoPlus } from "react-icons/go";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { AiFillEdit } from "react-icons/ai";
 
 interface commentType {
@@ -21,7 +20,6 @@ interface shownType {
 }
 
 export default function Favourites() {
-  const router = useRouter();
   const { fetchFavourites, favourites } = valueStore();
   const [shown, setShown] = React.useState<shownType>({});
   const [updatedShown, setUpdatedShown] = React.useState<shownType>({});
@@ -46,7 +44,7 @@ export default function Favourites() {
       }
     };
     fetchDatas();
-  }, []);
+  }, [fetchFavourites]);
 
   const handleClick = async (value: valueType) => {
     try {
@@ -73,6 +71,8 @@ export default function Favourites() {
       const { success, message } = res.data;
       if (success) {
         toast.success(message);
+        window.location.reload();  //if only success then we reload the window location to display
+
       } else {
         toast.error(message);
       }
@@ -124,6 +124,7 @@ export default function Favourites() {
               <div className="transition-all duration-300 ease-in-out overflow-hidden">
                 <Textarea
                   className="mt-2"
+                  value={comments[item.link]}
                   onChange={(e) => {
                     setComments((prevState) => ({
                       ...prevState,
@@ -133,13 +134,12 @@ export default function Favourites() {
                 />
                 <Button
                   className="mt-2"
-                  onClick={() => {
+                  onClick={() =>
                     handleClick2({
                       link: item.link,
                       comment: comments[item.link],
-                    });
-                    window.location.reload();
-                  }}
+                    })
+                  }
                 >
                   Update Comment
                 </Button>
@@ -173,7 +173,6 @@ export default function Favourites() {
               className="mt-2"
               onClick={() => {
                 handleClick({ link: item.link, comment: comments[item.link] });
-                window.location.reload();
               }}
             >
               Save Comment

@@ -20,29 +20,29 @@ interface resultType {
   userid: ObjectId;
   title: string;
   link: string;
-  comment:string|null;   //here we are declaring that this comment key is either of type string or null
+  comment: string | null; //here we are declaring that this comment key is either of type string or null
 }
 
 interface tagresultType {
   //this is the type of the object inside an array which is obtained from the return method of mongodb client.
   userid: ObjectId;
-  tag:string;
+  tag: string;
   title: string;
   link: string;
 }
 
-interface tagType{
-  tagTitle:string;
-  link:string;
+interface tagType {
+  tagTitle: string;
+  link: string;
 }
 
 interface dataStoreType {
   links: string[];
   savedLinks: resultType[];
-  taggedDeals:tagresultType[];
+  taggedDeals: tagresultType[];
   titles: string[];
   images: string[];
-  favourites:resultType[];
+  favourites: resultType[];
   fetchDatas: (
     category: string,
     price: string,
@@ -55,11 +55,13 @@ interface dataStoreType {
     link: string
   ) => Promise<{ success: boolean; message: string }>;
   seeDeals: () => Promise<{ success: boolean; message: string }>;
-   fetchFavourites: () => Promise<{ success: boolean; message: string }>;
+  fetchFavourites: () => Promise<{ success: boolean; message: string }>;
   deleteDeal: (link: string) => Promise<{ success: boolean; message: string }>;
-  addTag:   (tag: tagType) => Promise<{ success: boolean; message: string }>;
-  addToFav:   (link: string) => Promise<{ success: boolean; message: string }>;
-  fetchtagDeals: (tagname: string) => Promise<{ success: boolean; message: string }>;
+  addTag: (tag: tagType) => Promise<{ success: boolean; message: string }>;
+  addToFav: (link: string) => Promise<{ success: boolean; message: string }>;
+  fetchtagDeals: (
+    tagname: string
+  ) => Promise<{ success: boolean; message: string }>;
   reset: () => void;
 }
 
@@ -68,9 +70,8 @@ export const valueStore = create<dataStoreType>((set) => ({
   savedLinks: [],
   titles: [],
   images: [],
-  taggedDeals:[],
-  favourites:[]
-  ,
+  taggedDeals: [],
+  favourites: [],
   fetchDatas: async (category, price, rate, item, location) => {
     try {
       const res = await axios.post("/api/search", {
@@ -167,45 +168,48 @@ export const valueStore = create<dataStoreType>((set) => ({
       return { success: false, message: "Internal server error" };
     }
   },
-  addTag:async(tag)=>{
-     try {
-      const res = await axios.post("/api/addtag", {
-       tag
-      },{
-        headers:{
-          'Content-Type':'application/json'
+  addTag: async (tag) => {
+    try {
+      const res = await axios.post(
+        "/api/addtag",
+        {
+          tag,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      }); //while using the delete method we must pass the object or the value inside a key which is in an object form that must be inside an object as a value having a key called data.
-      const { success, data, message } = res.data;
-      if (success) {
-       
-        return { success: true, message };
-      }
-      else{
-         return { success: false, message:'tag already added to this deal' };
-      }
-     
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(error.message);
-        return { success: false, message: 'tag already added to this deal' };
-      }
-      return { success: false, message: "Internal server error" };
-    }
-
-  },
-  fetchtagDeals:async(tagname)=>{
-     try {
-      const res = await axios.get(`/api/fetchbytag/${tagname.toLowerCase()}`,    
       ); //while using the delete method we must pass the object or the value inside a key which is in an object form that must be inside an object as a value having a key called data.
       const { success, data, message } = res.data;
       if (success) {
-        set(()=>({
-          taggedDeals:data
-        }))
-        return { success: true, message:message };
+        return { success: true, message };
+      } else {
+        return { success: false, message: "tag already added to this deal" };
       }
-      return { success: false, message:message };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        return { success: false, message: "tag already added to this deal" };
+      }
+      return { success: false, message: "Internal server error" };
+    }
+  },
+  fetchtagDeals: async (tagname) => {
+    try {
+      const res = await axios.get(`/api/fetchbytag/${tagname.toLowerCase()}`); //while using the delete method we must pass the object or the value inside a key which is in an object form that must be inside an object as a value having a key called data.
+      const { success, data, message } = res.data;
+      if (success) {
+        set(() => ({
+          taggedDeals: data,
+        }));
+        return { success: true, message: message };
+      } else {
+        set(() => ({
+          taggedDeals: [],   //if there is error or no links found under the tag then we set the taggedDeals to empty array.
+        }));
+        return { success: false, message: message };
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -213,49 +217,44 @@ export const valueStore = create<dataStoreType>((set) => ({
       }
       return { success: false, message: "Internal server error" };
     }
-
   },
-  addToFav:async(link)=>{
+  addToFav: async (link) => {
     try {
-      const res=await axios.post('/api/favourite',{link},{
-        headers:{
-          'Content-Type':'application/json'
+      const res = await axios.post(
+        "/api/favourite",
+        { link },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
-      const {success,message}=res.data;
-       if (success) {
-       
-        return { success: true, message:message };
+      );
+      const { success, message } = res.data;
+      if (success) {
+        return { success: true, message: message };
+      } else {
+        return { success: false, message: message };
       }
-      else{
-         return { success: false, message:message };
-      }
-     
-
-      
-    } catch (error:unknown) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message);
         return { success: false, message: error.message };
       }
       return { success: false, message: "Internal server error" };
     }
-  }
-  ,
-  fetchFavourites:async()=>{
-     try {
+  },
+  fetchFavourites: async () => {
+    try {
       const res = await axios.get("/api/getfavourites"); //here we are using get method to fetch the deals which are assigned favourites from this endpoint
       const { success, data, message } = res.data;
       if (success) {
         set(() => ({
           favourites: data,
         }));
-        return { success: true, message:message };
+        return { success: true, message: message };
+      } else {
+        return { success: false, message: message };
       }
-      else{
-         return { success: false, message:message };
-      }
-     
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -264,9 +263,8 @@ export const valueStore = create<dataStoreType>((set) => ({
 
       return { success: false, message: "Internal server error" };
     }
+  },
 
-  }
-  
-  ,
-  reset: () => set({ links: [], titles: [], images: [], savedLinks: [],taggedDeals:[] }),
+  reset: () =>
+    set({ links: [], titles: [], images: [], savedLinks: [], taggedDeals: [] }),
 }));

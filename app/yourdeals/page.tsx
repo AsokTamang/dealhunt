@@ -24,7 +24,7 @@ export default function Deals() {
   React.useEffect(() => {
     const fetchDatas = async () => {
       try {
-        const res = await seeDeals();
+         await seeDeals();
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.log(error.message);
@@ -32,7 +32,7 @@ export default function Deals() {
       }
     };
     fetchDatas();
-  }, []);
+  }, [seeDeals]);
 
   const handleClick = async (link: string) => {
     try {

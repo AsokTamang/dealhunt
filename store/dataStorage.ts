@@ -201,7 +201,7 @@ export const valueStore = create<dataStoreType>((set) => ({
       const { success, data, message } = res.data;
       if (success) {
         set((state) => ({
-          taggedDeals: [...state.taggedDeals,...data],
+          taggedDeals: [data],
         }));
         return { success: true, message: message };
       } else {

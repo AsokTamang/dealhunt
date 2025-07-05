@@ -54,6 +54,8 @@ export default function Favourites() {
       const { success, message } = res.data;
       if (success) {
         toast.success(message);
+         window.location.reload();
+
       } else {
         toast.error(message);
       }
